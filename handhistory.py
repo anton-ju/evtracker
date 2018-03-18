@@ -8,140 +8,23 @@ import re
 import numpy as np
 import itertools
 
-testhand = """PokerStars Hand #157033607016: Tournament #1638818751, $13.89+$1.11 USD Hold'em No Limit - Level VIII (150/300) - 2016/08/08 23:36:07 MSK [2016/08/08 16:36:07 ET]
-Table '1638818751 1' 9-max Seat #1 is the button
-Seat 1: DiggErr555 (1386 in chips)
-Seat 4: IAmTheDisco (3413 in chips)
-Seat 7: hugo023 (2138 in chips)
-Seat 9: Neo1186 (6563 in chips)
-DiggErr555: posts the ante 25
-IAmTheDisco: posts the ante 25
-hugo023: posts the ante 25
-Neo1186: posts the ante 25
-IAmTheDisco: posts small blind 150
-hugo023: posts big blind 300
-*** HOLE CARDS ***
-Dealt to DiggErr555 [8d As]
-Neo1186: raises 6238 to 6538 and is all-in
-DiggErr555: calls 1361 and is all-in
-IAmTheDisco: folds
-hugo023: folds
-Uncalled bet (5177) returned to Neo1186
-*** FLOP *** [8s Ks 4d]
-*** TURN *** [8s Ks 4d] [Kh]
-*** RIVER *** [8s Ks 4d Kh] [5h]
-*** SHOW DOWN ***
-Neo1186: shows [2d 4c] (two pair, Kings and Fours)
-DiggErr555: shows [8d As] (two pair, Kings and Eights)
-DiggErr555 collected 3272 from pot
-*** SUMMARY ***
-Total pot 3272 | Rake 0
-Board [8s Ks 4d Kh 5h]
-Seat 1: DiggErr555 (button) showed [8d As] and won (3272) with two pair, Kings and Eights
-Seat 4: IAmTheDisco (small blind) folded before Flop
-Seat 7: hugo023 (big blind) folded before Flop
-Seat 9: Neo1186 showed [2d 4c] and lost with two pair, Kings and Fours
-
-
-
-"""
-th2 = """
-***** 888poker Hand History for Game 655462938 *****
-$100/$200 Blinds No Limit Holdem - *** 08 08 2016 23:03:27
-Tournament #83728678 $18.30 + $1.70 - Table #1 9 Max (Real Money)
-Seat 5 is the button
-Total number of players : 5
-Seat 1: Mr.Tatt00 ( $3,548 )
-Seat 5: bilguun0226 ( $1,614 )
-Seat 7: DiggErr555 ( $4,886 )
-Seat 9: MatjeP ( $1,058 )
-Seat 10: CerealRobber ( $2,394 )
-Mr.Tatt00 posts ante [$20]
-CerealRobber posts ante [$20]
-MatjeP posts ante [$20]
-bilguun0226 posts ante [$20]
-DiggErr555 posts ante [$20]
-DiggErr555 posts small blind [$100]
-MatjeP posts big blind [$200]
-** Dealing down cards **
-Dealt to DiggErr555 [ 8c, Qs ]
-CerealRobber raises [$400]
-Mr.Tatt00 folds
-bilguun0226 raises [$1,594]
-DiggErr555 folds
-MatjeP calls [$838]
-CerealRobber folds
-** Dealing flop ** [ 6d, 7s, Kd ]
-** Dealing turn ** [ 5c ]
-** Dealing river ** [ 8d ]
-** Summary **
-bilguun0226 shows [ Qd, Js ]
-MatjeP shows [ Ac, Ad ]
-MatjeP collected [ $2,676 ]
-"""
-
-th3 = """
-***** Hand History for Game 15549114547 *****
-NL Texas Hold'em $215 USD Buy-in Trny:128730277 Level:12  Blinds-Antes(1 200/2 400 -400) - Monday, September 26, 01:30:41 MSK 2016
-Table Powerfest #193 - Main Event $500,000 Gtd (128730277) Table #83 (Real Money)
-Seat 5 is the button
-Total number of players : 9/9
-Seat 6: Achileus34 ( 63,222 )
-Seat 8: Alex0876 ( 107,844 )
-Seat 9: ChickAndChipS ( 180,112 )
-Seat 7: Corlusion ( 205,081 )
-Seat 1: DiSTEFANO_ ( 61,490 )
-Seat 4: DiggErr555 ( 53,728 )
-Seat 5: KatozaForAll ( 47,649 )
-Seat 2: PokerPalvo1499 ( 80,022 )
-Seat 3: ihadafeeling ( 115,918 )
-Trny:128730277 Level:12
-Blinds-Antes(1 200/2 400 -400)
-DiSTEFANO_ posts ante [400]
-PokerPalvo1499 posts ante [400]
-ihadafeeling posts ante [400]
-DiggErr555 posts ante [400]
-KatozaForAll posts ante [400]
-Achileus34 posts ante [400]
-Corlusion posts ante [400]
-Alex0876 posts ante [400]
-ChickAndChipS posts ante [400]
-Achileus34 posts small blind [1,200].
-Corlusion posts big blind [2,400].
-** Dealing down cards **
-Dealt to DiggErr555 [  Th Kh ]
-Alex0876 folds
-ChickAndChipS folds
-DiSTEFANO_ folds
-PokerPalvo1499 raises [5,280]
-ihadafeeling folds
-DiggErr555 will be using their time bank for this hand.
-DiggErr555 is all-In  [53,328]
-KatozaForAll folds
-Achileus34 folds
-Corlusion is all-In  [202,281]
-PokerPalvo1499 folds
-** Dealing Flop ** [ Qd, Td, 7s ]
-** Dealing Turn ** [ 6d ]
-** Dealing River ** [ 6s ]
-Corlusion shows [ Jc, Jh ]two pairs, Jacks and Sixes.
-DiggErr555 shows [ Th, Kh ]two pairs, Tens and Sixes.
-Corlusion wins 151,353 chips from the side pot 1 with two pairs, Jacks and Sixes.
-Corlusion wins 116,736 chips from the main pot with two pairs, Jacks and Sixes.
-Player DiggErr555 finished in 840.
-"""
-
-
 class Hand:
     hand_history = ""
-    card1 = 0
-    card2 = 0
+    pocket= 0
     flop = 0
     turn = 0
     river = 0
     stacks = []
     players = []
+    cards = 0
+#   blinds and ante amount in chips
     ante = 0
+    bb = 0
+    sb = 0
+#   
+    allinstreet = 0
+
+#   index of players who posts blinds
     small_blind = 0
     big_blind = 0
     preflop_order = [] #чем больше число чем позже принимает решение
@@ -155,14 +38,24 @@ class Hand:
 #        t = re.compile(regex_ps)
 #        if t.match(self.hand_history):
 #            print("poker stars hand detected")
-        regex =  "Seat\s?[0-9]:\s(.*)\s\(\s?\$?(\d*,?\d*)\s(?:in\schips)?" 
+        stacks_regex =  "Seat\s?[0-9]:\s(.*)\s\(\s?\$?(\d*,?\d*)\s(?:in\schips)?" 
         sb = "(.*)?:\sposts small"
         bb = "(.*)?:\sposts big"
+        ante_regex = "the ante\s(\d)"
+        blinds_regex ="Level.*\((\d*)\/(\d*)"
 #        t = re.search(regex)
         
+        pocket_regex = "HOLE CARDS\s\*\*\*\sDealt\sto\s\w*\s\[(.*)\]"
+        allin_prf_regex = "all-in.*FLOP\s\*\*\*"
+        allin_flop_regex = "all-in.*TURN\s\*\*\*"
+        allin_turn_regex = "all-in.*RIVER\s\*\*\*"
+        allin_river_regex = "all-in.*DOWN\s\*\*\*"
+        cards_regex = "(.*):\sshows\s\[(.*)\]"
+        
+
         self.PRIZE = np.array([0.50, 0.50])
         
-        tupples = re.findall(regex,self.hand_history)
+        tupples = re.findall(stacks_regex,self.hand_history)
 
         self.players = [x[0] for x in tupples]
         self.stacks = [float(x[1].replace(",","")) for x in tupples]
@@ -178,6 +71,18 @@ class Hand:
             pass
         finally:  
             pass
+        res= re.search(blinds_regex, self.hand_history)
+        if res:
+            self.sb = res.group(1)
+            self.bb = res.group(2)
+        
+        res = re.search(ante_regex, self.hand_history)
+        if res:
+            self.ante = res.group(1)
+            
+        res = re.search(pocket_regex, self.hand_history)
+        if res:
+            self.pocket = res.group(1)
         
         res = re.search(bb, self.hand_history) 
         if res:
@@ -190,9 +95,28 @@ class Hand:
                 self.preflop_order = self.players[self.small_blind+1:] + self.players[:self.small_blind+1]
             
 # в префлоп ордер теперь содержится порядок действия игроков как они сидят префлоп от утг до бб
+
         
-        
-        
+#       all in street
+        res = re.search(allin_prf_regex, self.hand_history, re.DOTALL)
+        if res:
+            self.allinstreet = 1
+        else:
+            res = re.search(allin_flop_regex, self.hand_history, re.DOTALL)
+            if res:
+                self.allinstreet = 2
+            else:
+                res = re.search(allin_turn_regex, self.hand_history, re.DOTALL)
+                if res:
+                    self.allinstreet = 3
+                else:
+                    res = re.search(allin_river_regex, self.hand_history, re.DOTALL)
+                    if res:
+                        self.allinstreet = 4
+                        
+#       players cards
+        res = re.findall(cards_regex, self.hand_history)
+        self.cards = dict(res)
     def p1p(self, ind, place):
 #       вероятность place го места для игрока ind   
             
@@ -407,7 +331,34 @@ class Hand:
         return len(self.stacks)
 
 #   end getPlayersNumber
+    
+    def getAnte(self):
+        return self.ante
+    
+    def getBB(self):
+        return self.bb
+    
+    
+    def getSB(self):
+        return self.sb
+    
+    def getAllinStreet(self):
         
+#        return :
+#       0 no all in in hand
+#       1 preflop all in
+#       2 flop all in
+#       3 turn
+#       4 river
+        return self.allinstreet
         
+    def getPocketCards(self):
+#       returns Hero hand as string
+        return self.pocket
+    
+    def getKnownCards(self):
+#        returns list with known cards. position in the list corresponds 
+#       player position
+        return self.cards
         
         

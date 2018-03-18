@@ -10,7 +10,7 @@ import eval7
 import pprint
 
 hand = map(eval7.Card, ("As", "Kd"))
-villain = eval7.HandRange("2c2s")
+villain = eval7.HandRange("2c 2s")
 board = []
 equity_monte = eval7.py_hand_vs_range_monte_carlo(
     hand, villain, board, 1000000

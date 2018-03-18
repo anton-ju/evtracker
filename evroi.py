@@ -438,3 +438,9 @@ print(h1.getStackList())
 print("ICM")
 print(h1.icm_eq())
 
+print(h1.getAnte())
+
+print(h1.getSB() +"/"+ h1.getBB())
+print(h1.getPocketCards())
+print(h1.getAllinStreet())
+print(h1.getKnownCards())
